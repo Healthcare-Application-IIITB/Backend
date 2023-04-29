@@ -195,9 +195,9 @@ public class ConsultationService {
         Integer docId= consultation.getDoctor_id();
         Doctor doctor=doctorRepository.findDocById(docId);
         DQueue queue = dQueueRepository.findDQueueByDoctor(doctor);
-        List<Consultation> consultaionList = new ArrayList<>();
-        consultaionList.add(c);
-        queue.setConsultationList(consultaionList);
+        Consultation consultaion = c;
+
+        queue.setConsultation(consultaion);
         dQueueRepository.save(queue);
         return c.getId();
     }
@@ -225,7 +225,7 @@ public class ConsultationService {
             Date followUpDate = c.getFollowUpDate();
             Timestamp currentDate = c.getStartTime();
             java.sql.Date date=new java.sql.Date(System.currentTimeMillis());
-            if(currentDate.before(followUpDate) && (followUpDate.compareTo(date)<=0))
+            if(currentDate.before(followUpDate))
             {
                 Integer consultationId = c.getConsultId();
                 Consultation consultation = consultationRepository.findConsultationById(consultationId);
